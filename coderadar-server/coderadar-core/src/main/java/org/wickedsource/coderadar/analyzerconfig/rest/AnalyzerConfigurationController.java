@@ -3,16 +3,11 @@ package org.wickedsource.coderadar.analyzerconfig.rest;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
@@ -21,7 +16,6 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller
-@ExposesResourceFor(AnalyzerConfiguration.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/analyzers")
 public class AnalyzerConfigurationController {
@@ -42,7 +36,7 @@ public class AnalyzerConfigurationController {
     this.analyzerVerifier = analyzerVerifier;
   }
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   public ResponseEntity<AnalyzerConfigurationResource> setAnalyzerConfiguration(
       @PathVariable Long projectId, @Valid @RequestBody AnalyzerConfigurationResource resource) {
     // TODO: overwrite, if existing
@@ -63,7 +57,7 @@ public class AnalyzerConfigurationController {
     return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.CREATED);
   }
 
-  @RequestMapping(path = "/{analyzerConfigurationId}", method = RequestMethod.DELETE)
+  @DeleteMapping(path = "/{analyzerConfigurationId}")
   public ResponseEntity<String> deleteAnalyzerConfigurationFromProject(
       @PathVariable Long projectId, @PathVariable Long analyzerConfigurationId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
@@ -71,19 +65,16 @@ public class AnalyzerConfigurationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<Resources<AnalyzerConfigurationResource>>
+  @GetMapping(produces = "application/hal+json")
+  public ResponseEntity<List<AnalyzerConfigurationResource>>
       getAnalyzerConfigurationsForProject(@PathVariable Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
-    List<AnalyzerConfiguration> configurations =
-        analyzerConfigurationRepository.findByProjectId(projectId);
-    AnalyzerConfigurationResourceAssembler assembler =
-        new AnalyzerConfigurationResourceAssembler(projectId);
-    return new ResponseEntity<>(
-        new Resources(assembler.toResourceList(configurations)), HttpStatus.OK);
+    List<AnalyzerConfiguration> configurations = analyzerConfigurationRepository.findByProjectId(projectId);
+    AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
+    return new ResponseEntity<>(assembler.toResourceList(configurations), HttpStatus.OK);
   }
 
-  @RequestMapping(path = "/{analyzerConfigurationId}", method = RequestMethod.GET)
+  @GetMapping(path = "/{analyzerConfigurationId}")
   public ResponseEntity<AnalyzerConfigurationResource> getSingleAnalyzerConfigurationForProject(
       @PathVariable Long projectId, @PathVariable Long analyzerConfigurationId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
@@ -97,7 +88,7 @@ public class AnalyzerConfigurationController {
     return new ResponseEntity<>(assembler.toResource(configuration), HttpStatus.OK);
   }
 
-  @RequestMapping(path = "/{analyzerConfigurationId}", method = RequestMethod.POST)
+  @PostMapping(path = "/{analyzerConfigurationId}")
   public ResponseEntity<AnalyzerConfigurationResource> updateAnalyzerConfiguration(
       @PathVariable Long projectId,
       @PathVariable Long analyzerConfigurationId,

@@ -12,7 +12,6 @@ import org.wickedsource.coderadar.user.domain.UserResource;
 public class UserResourceAssembler extends AbstractResourceAssembler<User, UserResource> {
 
   public UserResourceAssembler() {
-    super(UserController.class, UserResource.class);
   }
 
   @Override

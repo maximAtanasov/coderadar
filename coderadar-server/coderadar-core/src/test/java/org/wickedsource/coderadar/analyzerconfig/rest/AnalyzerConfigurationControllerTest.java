@@ -20,6 +20,8 @@ import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
+import java.util.List;
+
 @Category(ControllerTest.class)
 public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate {
 
@@ -41,15 +43,6 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
         .andDo(
             document(
                 "analyzerConfiguration/post",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to the AnalyzerConfiguration itself."),
-                    linkWithRel("list")
-                        .description(
-                            "Link to the list of AnalyzerConfigurations for this project."),
-                    linkWithRel("project")
-                        .description(
-                            "Link to the project to which the AnalyzerConfiguration belongs.")),
                 requestFields(
                     fields
                         .withPath("analyzerName")
@@ -68,7 +61,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     mvc()
         .perform(get("/projects/1/analyzers"))
         .andExpect(status().isOk())
-        .andExpect(containsResource(Resources.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("analyzerConfiguration/get"));
   }
 

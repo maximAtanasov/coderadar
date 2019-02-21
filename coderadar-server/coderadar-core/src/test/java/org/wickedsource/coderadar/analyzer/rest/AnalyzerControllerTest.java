@@ -13,6 +13,8 @@ import org.springframework.hateoas.PagedResources;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
+import java.util.List;
+
 @Category(ControllerTest.class)
 public class AnalyzerControllerTest extends ControllerTestTemplate {
 
@@ -21,9 +23,9 @@ public class AnalyzerControllerTest extends ControllerTestTemplate {
   @ExpectedDatabase(EMPTY)
   public void listAnalyzers() throws Exception {
     mvc()
-        .perform(get("/analyzers?page=0&size=2"))
+        .perform(get("/analyzers"))
         .andExpect(status().isOk())
-        .andExpect(containsResource(PagedResources.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("analyzer/list"));
   }
 }

@@ -56,12 +56,6 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(ProjectResource.class);
     return document(
         "projects/create",
-        links(
-            halLinks(),
-            linkWithRel("self").description("Link to the project."),
-            linkWithRel("files").description("Link to the project's file patterns."),
-            linkWithRel("analyzers").description("Link to the project's analyzer configurations."),
-            linkWithRel("strategy").description("Link to the project's analyzing strategy.")),
         requestFields(
             fields.withPath("name").description("The name of the project to be analyzed."),
             fields

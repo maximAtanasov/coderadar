@@ -12,7 +12,6 @@ public class CommitResourceAssembler extends AbstractResourceAssembler<Commit, C
   private long projectId;
 
   public CommitResourceAssembler(long projectId) {
-    super(CommitController.class, CommitResource.class);
     this.projectId = projectId;
   }
 
