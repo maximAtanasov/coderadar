@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.analyzerconfig.rest;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.rest.ProjectController;
 
 public class AnalyzerConfigurationResourceAssembler
     extends AbstractResourceAssembler<AnalyzerConfiguration, AnalyzerConfigurationResource> {

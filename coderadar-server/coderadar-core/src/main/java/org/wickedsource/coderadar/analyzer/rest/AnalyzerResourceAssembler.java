@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.analyzer.rest;
 
-
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 
 public class AnalyzerResourceAssembler extends AbstractResourceAssembler<String, AnalyzerResource> {
@@ -9,5 +8,4 @@ public class AnalyzerResourceAssembler extends AbstractResourceAssembler<String,
   public AnalyzerResource toResource(String analyzerName) {
     return new AnalyzerResource(analyzerName);
   }
-
 }

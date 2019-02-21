@@ -1,20 +1,14 @@
 package org.wickedsource.coderadar.qualityprofile.rest;
 
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
@@ -37,7 +31,7 @@ public class QualityProfileController {
     this.qualityProfileRepository = qualityProfileRepository;
   }
 
-  @RequestMapping(method = RequestMethod.POST, produces = "application/hal+json")
+  @PostMapping(produces = "application/hal+json")
   public ResponseEntity<QualityProfileResource> createQualityProfile(
       @RequestBody @Valid QualityProfileResource qualityProfileResource,
       @PathVariable Long projectId) {
@@ -48,11 +42,7 @@ public class QualityProfileController {
     return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.CREATED);
   }
 
-  @RequestMapping(
-    path = "/{profileId}",
-    method = RequestMethod.POST,
-    produces = "application/hal+json"
-  )
+  @PostMapping(path = "/{profileId}", produces = "application/hal+json")
   public ResponseEntity<QualityProfileResource> updateQualityProfile(
       @Valid @RequestBody QualityProfileResource qualityProfileResource,
       @PathVariable Long profileId,
@@ -68,11 +58,7 @@ public class QualityProfileController {
     return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
   }
 
-  @RequestMapping(
-    path = "/{profileId}",
-    method = RequestMethod.GET,
-    produces = "application/hal+json"
-  )
+  @GetMapping(path = "/{profileId}", produces = "application/hal+json")
   public ResponseEntity<QualityProfileResource> getQualityProfile(
       @PathVariable Long profileId, @PathVariable Long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
@@ -84,11 +70,7 @@ public class QualityProfileController {
     return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
   }
 
-  @RequestMapping(
-    path = "/{profileId}",
-    method = RequestMethod.DELETE,
-    produces = "application/hal+json"
-  )
+  @DeleteMapping(path = "/{profileId}", produces = "application/hal+json")
   public ResponseEntity<String> deleteQualityProfile(
       @PathVariable Long profileId, @PathVariable Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
@@ -97,17 +79,12 @@ public class QualityProfileController {
   }
 
   @SuppressWarnings("unchecked")
-  @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<PagedResources<QualityProfileResource>> listQualityProfiles(
-      @PageableDefault Pageable pageable,
-      PagedResourcesAssembler pagedResourcesAssembler,
-      @PathVariable long projectId) {
+  @GetMapping(produces = "application/hal+json")
+  public ResponseEntity<List<QualityProfileResource>> listQualityProfiles(@PathVariable long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
-    Page<QualityProfile> profilesPage =
-        qualityProfileRepository.findByProjectId(projectId, pageable);
+    List<QualityProfile> profilesPage = qualityProfileRepository.findByProjectId(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    PagedResources<QualityProfileResource> pagedResources =
-        pagedResourcesAssembler.toResource(profilesPage, assembler);
+    List<QualityProfileResource> pagedResources = assembler.toResourceList(profilesPage);
     return new ResponseEntity<>(pagedResources, HttpStatus.OK);
   }
 }

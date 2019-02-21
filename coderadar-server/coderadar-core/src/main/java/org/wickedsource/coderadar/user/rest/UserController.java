@@ -10,10 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.wickedsource.coderadar.core.rest.validation.AccessTokenNotExpiredException;
 import org.wickedsource.coderadar.core.rest.validation.RegistrationException;
 import org.wickedsource.coderadar.security.domain.*;
@@ -64,7 +61,7 @@ public class UserController {
     this.passwordChangeService = passwordChangeService;
   }
 
-  @RequestMapping(method = RequestMethod.POST, path = "/registration")
+  @PostMapping(path = "/registration")
   public ResponseEntity<UserResource> register(
       @Valid @RequestBody UserRegistrationDataResource userRegistrationDataResource) {
     if (registrationService.userExists(userRegistrationDataResource)) {
@@ -75,14 +72,14 @@ public class UserController {
     return new ResponseEntity<>(userResource, HttpStatus.CREATED);
   }
 
-  @RequestMapping(method = RequestMethod.GET, path = "/{userId}")
+  @GetMapping(path = "/{userId}")
   public ResponseEntity<UserResource> getUser(@PathVariable Long userId) {
     User user = registrationService.getUser(userId);
     UserResource userResource = userResourceAssembler.toResource(user);
     return new ResponseEntity<>(userResource, HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.POST, path = "/auth")
+  @PostMapping(path = "/auth")
   public ResponseEntity<InitializeTokenResource> login(
       @Valid @RequestBody UserLoginResource userLoginResource) {
     Authentication authentication =
@@ -96,7 +93,7 @@ public class UserController {
     return new ResponseEntity<>(initializeTokenResource, HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.POST, path = "/refresh")
+  @PostMapping(path = "/refresh")
   public ResponseEntity<AccessTokenResource> refresh(
       @Valid @RequestBody RefreshTokenResource refreshTokenResource) {
     if (tokenService.isExpired(refreshTokenResource.getAccessToken())) {
@@ -107,11 +104,11 @@ public class UserController {
     throw new AccessTokenNotExpiredException();
   }
 
-  @RequestMapping(method = RequestMethod.POST, path = "/password/change")
+  @PostMapping(path = "/password/change")
   public ResponseEntity<ChangePasswordResponseResource> changePassword(
-      @Valid @RequestBody PasswordChangeResource passwordChangeResource) {
-    ChangePasswordResponseResource passwordResponseResource =
-        passwordChangeService.change(
+          @Valid @RequestBody PasswordChangeResource passwordChangeResource) {
+
+    ChangePasswordResponseResource passwordResponseResource = passwordChangeService.change(
             passwordChangeResource.getRefreshToken(), passwordChangeResource.getNewPassword());
     return new ResponseEntity<>(passwordResponseResource, HttpStatus.OK);
   }

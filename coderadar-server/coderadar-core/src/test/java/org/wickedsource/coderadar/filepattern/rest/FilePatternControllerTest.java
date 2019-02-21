@@ -39,12 +39,6 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "filepatterns/create-update",
-                links(
-                    halLinks(),
-                    linkWithRel("self")
-                        .description("Link to the list of file patterns of this project."),
-                    linkWithRel("project")
-                        .description("Link to the project these file patterns belong to.")),
                 requestFields(
                     fields
                         .withPath("filePatterns[].pattern")

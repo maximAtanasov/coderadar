@@ -66,11 +66,13 @@ public class AnalyzerConfigurationController {
   }
 
   @GetMapping(produces = "application/hal+json")
-  public ResponseEntity<List<AnalyzerConfigurationResource>>
-      getAnalyzerConfigurationsForProject(@PathVariable Long projectId) {
+  public ResponseEntity<List<AnalyzerConfigurationResource>> getAnalyzerConfigurationsForProject(
+      @PathVariable Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
-    List<AnalyzerConfiguration> configurations = analyzerConfigurationRepository.findByProjectId(projectId);
-    AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
+    List<AnalyzerConfiguration> configurations =
+        analyzerConfigurationRepository.findByProjectId(projectId);
+    AnalyzerConfigurationResourceAssembler assembler =
+        new AnalyzerConfigurationResourceAssembler(projectId);
     return new ResponseEntity<>(assembler.toResourceList(configurations), HttpStatus.OK);
   }
 

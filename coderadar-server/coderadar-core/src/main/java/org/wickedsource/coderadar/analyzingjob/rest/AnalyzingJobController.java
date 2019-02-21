@@ -2,15 +2,11 @@ package org.wickedsource.coderadar.analyzingjob.rest;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob;
 import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
 import org.wickedsource.coderadar.analyzingjob.domain.ProjectResetException;
@@ -21,7 +17,6 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller
-@ExposesResourceFor(Project.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/analyzingJob")
 public class AnalyzingJobController {
@@ -42,7 +37,7 @@ public class AnalyzingJobController {
     this.projectResetter = projectResetter;
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public ResponseEntity<AnalyzingJobResource> getAnalyzingJob(
       @PathVariable("projectId") Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
@@ -50,11 +45,11 @@ public class AnalyzingJobController {
     if (strategy == null) {
       throw new ResourceNotFoundException();
     }
-    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
+    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler();
     return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   public ResponseEntity<AnalyzingJobResource> setAnalyzingJob(
       @PathVariable("projectId") Long projectId,
       @Valid @RequestBody AnalyzingJobResource resource) {
@@ -74,7 +69,7 @@ public class AnalyzingJobController {
       strategy = new AnalyzingJob();
     }
 
-    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
+    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler();
     strategy = assembler.updateEntity(strategy, resource, project);
     analyzingJobRepository.save(strategy);
     return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);

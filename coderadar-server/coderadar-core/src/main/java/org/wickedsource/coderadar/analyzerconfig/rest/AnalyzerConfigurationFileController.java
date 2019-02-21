@@ -3,16 +3,12 @@ package org.wickedsource.coderadar.analyzerconfig.rest;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
@@ -25,7 +21,6 @@ import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
 
 @Controller
-@ExposesResourceFor(AnalyzerConfiguration.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}/file")
 public class AnalyzerConfigurationFileController {
@@ -46,7 +41,7 @@ public class AnalyzerConfigurationFileController {
     this.analyzerRegistry = analyzerRegistry;
   }
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   public ResponseEntity<String> uploadConfigurationFile(
       @PathVariable Long projectId,
       @PathVariable Long analyzerConfigurationId,
@@ -80,7 +75,7 @@ public class AnalyzerConfigurationFileController {
     }
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public ResponseEntity<ByteArrayResource> downloadConfigurationFile(
       @PathVariable Long projectId, @PathVariable Long analyzerConfigurationId) {
     AnalyzerConfigurationFile configFile =

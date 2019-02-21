@@ -3,22 +3,17 @@ package org.wickedsource.coderadar.filepattern.rest;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller
-@ExposesResourceFor(FilePattern.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/files")
 public class FilePatternController {
@@ -34,20 +29,20 @@ public class FilePatternController {
     this.projectVerifier = projectVerifier;
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public ResponseEntity<FilePatternResource> getFilePatterns(@PathVariable Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
-    FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
+    FilePatternResourceAssembler assembler = new FilePatternResourceAssembler();
     List<FilePattern> filePatternList = filePatternRepository.findByProjectId(projectId);
     FilePatternResource resource = assembler.toResource(filePatternList);
     return new ResponseEntity<>(resource, HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   public ResponseEntity<FilePatternResource> setFilePatterns(
       @PathVariable Long projectId, @Valid @RequestBody FilePatternResource resource) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
-    FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
+    FilePatternResourceAssembler assembler = new FilePatternResourceAssembler();
     filePatternRepository.deleteByProjectId(projectId);
     List<FilePattern> filePatterns = assembler.toEntity(resource, project);
     Iterable<FilePattern> savedFilePatterns = filePatternRepository.save(filePatterns);

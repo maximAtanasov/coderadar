@@ -40,11 +40,6 @@ public class AnalyzingJobControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "analyzing-job/create-update",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to this AnalyzingJob resource."),
-                    linkWithRel("project")
-                        .description("Link to the project resource this AnalyzingJob belongs to.")),
                 requestFields(
                     fields
                         .withPath("active")

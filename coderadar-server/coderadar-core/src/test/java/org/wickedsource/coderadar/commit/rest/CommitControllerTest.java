@@ -1,19 +1,17 @@
 package org.wickedsource.coderadar.commit.rest;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
-import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
-
-import java.util.List;
-
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Commits.SINGLE_PROJECT_WITH_COMMITS;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.List;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.wickedsource.coderadar.testframework.category.ControllerTest;
+import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 @Category(ControllerTest.class)
 public class CommitControllerTest extends ControllerTestTemplate {

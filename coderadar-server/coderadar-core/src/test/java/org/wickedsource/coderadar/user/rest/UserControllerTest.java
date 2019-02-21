@@ -10,6 +10,7 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Users
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.passwordChangeResource;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.userCredentialsResource;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.userLoginResource;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJson;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
@@ -79,7 +80,6 @@ public class UserControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(UserRegistrationDataResource.class);
     return document(
         "user/registration",
-        links(halLinks(), linkWithRel("self").description("Link to the user.")),
         requestFields(
             fields.withPath("username").description("The name of the user to be registered."),
             fields
@@ -91,7 +91,6 @@ public class UserControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(UserLoginResource.class);
     return document(
         "user/auth",
-        links(halLinks(), linkWithRel("self").description("Link to the user.")),
         requestFields(
             fields.withPath("username").description("The name of the user to be logged in."),
             fields.withPath("password").description("The password of the user as plaintext")));
@@ -158,7 +157,7 @@ public class UserControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/user/refresh") //
-                .content(toJsonWithoutLinks(refreshTokenResource))
+                .content(toJson(refreshTokenResource))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(containsResource(AccessTokenResource.class))
@@ -176,14 +175,13 @@ public class UserControllerTest extends ControllerTestTemplate {
     refreshTokenEntity.setToken(refreshToken);
     refreshTokenRepository.save(refreshTokenEntity);
 
-    PasswordChangeResource passwordChangeResource =
-        passwordChangeResource().passwordChangeResource();
+    PasswordChangeResource passwordChangeResource = passwordChangeResource().passwordChangeResource();
     passwordChangeResource.setRefreshToken(refreshToken);
 
     mvc()
         .perform(
             post("/user/password/change")
-                .content(toJsonWithoutLinks(passwordChangeResource))
+                .content(toJson(passwordChangeResource))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(containsResource(ChangePasswordResponseResource.class))
@@ -194,7 +192,6 @@ public class UserControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(PasswordChangeResource.class);
     return document(
         "user/password/change",
-        links(halLinks(), linkWithRel("self").description("Link to the user.")),
         requestFields(
             fields.withPath("refreshToken").description("the current refresh token of the user"),
             fields

@@ -1,25 +1,20 @@
 package org.wickedsource.coderadar.project.rest;
 
+import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectDeleter;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 @Controller
-@ExposesResourceFor(Project.class)
 @Transactional
 @RequestMapping(path = "/projects")
 public class ProjectController {
@@ -44,14 +39,13 @@ public class ProjectController {
     this.projectDeleter = projectDeleter;
   }
 
-  @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<Resources<ProjectResource>> getProjects() {
+  @GetMapping(produces = "application/hal+json")
+  public ResponseEntity<List<ProjectResource>> getProjects() {
     Iterable<Project> projects = projectRepository.findAll();
-    return new ResponseEntity<>(
-        new Resources(projectAssembler.toResourceList(projects)), HttpStatus.OK);
+    return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
   }
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   public ResponseEntity<ProjectResource> createProject(
       @Valid @RequestBody ProjectResource projectResource) {
     if (projectRepository.countByName(projectResource.getName()) > 0) {
@@ -67,21 +61,21 @@ public class ProjectController {
     return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
   }
 
-  @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+  @GetMapping(path = "/{id}")
   public ResponseEntity<ProjectResource> getProject(@PathVariable Long id) {
     Project project = projectVerifier.loadProjectOrThrowException(id);
     ProjectResource resultResource = projectAssembler.toResource(project);
     return new ResponseEntity<>(resultResource, HttpStatus.OK);
   }
 
-  @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+  @DeleteMapping(path = "/{id}")
   public ResponseEntity<String> deleteProject(@PathVariable Long id) {
     projectVerifier.checkProjectExistsOrThrowException(id);
     projectDeleter.deleteProject(id);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @RequestMapping(path = "/{id}", method = RequestMethod.POST)
+  @PostMapping(path = "/{id}")
   public ResponseEntity<ProjectResource> updateProject(
       @Valid @RequestBody ProjectResource projectResource, @PathVariable Long id) {
     Project project = projectVerifier.loadProjectOrThrowException(id);

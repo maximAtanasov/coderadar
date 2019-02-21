@@ -44,11 +44,6 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "qualityprofiles/create",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to this quality profile."),
-                    linkWithRel("project")
-                        .description("Link to the project this quality profile belongs to.")),
                 requestFields(
                     fields.withPath("profileName").description("The display name of the profile."),
                     fields
@@ -65,9 +60,9 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
   @ExpectedDatabase(SINGLE_PROJECT_WITH_QUALITY_PROFILES)
   public void listQualityProfiles() throws Exception {
     mvc()
-        .perform(get("/projects/1/qualityprofiles?page=0&size=2"))
+        .perform(get("/projects/1/qualityprofiles"))
         .andExpect(status().isOk())
-        .andExpect(containsPagedResources(QualityProfileResource.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("qualityprofiles/list"));
   }
 

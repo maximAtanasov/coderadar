@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.rest.AnalyzerResource;
 
 @Service
 public class AnalyzerPluginRegistry {

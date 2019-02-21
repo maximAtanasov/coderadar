@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
+import java.util.List;
+
 @Category(ControllerTest.class)
 public class ModuleControllerTest extends ControllerTestTemplate {
 
@@ -39,11 +41,6 @@ public class ModuleControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "modules/create",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to this module."),
-                    linkWithRel("project")
-                        .description("Link to the project this module belongs to.")),
                 requestFields(
                     fields
                         .withPath("modulePath")
@@ -85,7 +82,7 @@ public class ModuleControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects/1/modules"))
         .andExpect(status().isOk())
-        .andExpect(containsPagedResources(ModuleResource.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("modules/list"));
   }
 

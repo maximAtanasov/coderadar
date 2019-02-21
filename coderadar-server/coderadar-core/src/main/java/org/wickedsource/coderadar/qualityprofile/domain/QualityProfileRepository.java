@@ -1,10 +1,10 @@
 package org.wickedsource.coderadar.qualityprofile.domain;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
 
 public interface QualityProfileRepository extends CrudRepository<QualityProfile, Long> {
 
-  Page<QualityProfile> findByProjectId(Long projectId, Pageable pageable);
+  List<QualityProfile> findByProjectId(Long projectId);
 }

@@ -13,14 +13,12 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.List;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
-
-import java.util.List;
 
 @Category(ControllerTest.class)
 public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate {
