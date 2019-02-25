@@ -106,9 +106,10 @@ public class UserController {
 
   @PostMapping(path = "/password/change")
   public ResponseEntity<ChangePasswordResponseResource> changePassword(
-          @Valid @RequestBody PasswordChangeResource passwordChangeResource) {
+      @Valid @RequestBody PasswordChangeResource passwordChangeResource) {
 
-    ChangePasswordResponseResource passwordResponseResource = passwordChangeService.change(
+    ChangePasswordResponseResource passwordResponseResource =
+        passwordChangeService.change(
             passwordChangeResource.getRefreshToken(), passwordChangeResource.getNewPassword());
     return new ResponseEntity<>(passwordResponseResource, HttpStatus.OK);
   }

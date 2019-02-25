@@ -1,13 +1,12 @@
 package org.wickedsource.coderadar.commit.domain;
 
+import java.util.Date;
+import java.util.List;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
-
-import java.util.Date;
-import java.util.List;
 
 public interface CommitRepository extends PagingAndSortingRepository<Commit, Long> {
 

@@ -175,7 +175,8 @@ public class UserControllerTest extends ControllerTestTemplate {
     refreshTokenEntity.setToken(refreshToken);
     refreshTokenRepository.save(refreshTokenEntity);
 
-    PasswordChangeResource passwordChangeResource = passwordChangeResource().passwordChangeResource();
+    PasswordChangeResource passwordChangeResource =
+        passwordChangeResource().passwordChangeResource();
     passwordChangeResource.setRefreshToken(refreshToken);
 
     mvc()
@@ -191,7 +192,7 @@ public class UserControllerTest extends ControllerTestTemplate {
   private ResultHandler documentPasswordChange() {
     ConstrainedFields fields = fields(PasswordChangeResource.class);
     return document(
-            "user/password/change",
+        "user/password/change",
         requestFields(
             fields.withPath("refreshToken").description("the current refresh token of the user"),
             fields

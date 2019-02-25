@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.qualityprofile.rest;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -80,7 +79,8 @@ public class QualityProfileController {
 
   @SuppressWarnings("unchecked")
   @GetMapping(produces = "application/hal+json")
-  public ResponseEntity<List<QualityProfileResource>> listQualityProfiles(@PathVariable long projectId) {
+  public ResponseEntity<List<QualityProfileResource>> listQualityProfiles(
+      @PathVariable long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     List<QualityProfile> profilesPage = qualityProfileRepository.findByProjectId(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);

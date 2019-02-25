@@ -1,19 +1,5 @@
 package org.wickedsource.coderadar.project.rest;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultHandler;
-import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.domain.ProjectRepository;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
-import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -24,6 +10,19 @@ import static org.wickedsource.coderadar.factories.resources.ResourceFactory.pro
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJson;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.List;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultHandler;
+import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.testframework.category.ControllerTest;
+import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 @Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {

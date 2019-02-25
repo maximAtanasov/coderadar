@@ -19,7 +19,7 @@ public class AnalyzingJobResource {
     this.active = active;
   }
 
-  public AnalyzingJobResource(){};
+  public AnalyzingJobResource() {};
 
   public Date getFromDate() {
     return fromDate;

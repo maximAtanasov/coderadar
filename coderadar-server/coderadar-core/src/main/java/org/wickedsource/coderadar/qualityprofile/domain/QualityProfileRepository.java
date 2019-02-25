@@ -1,8 +1,7 @@
 package org.wickedsource.coderadar.qualityprofile.domain;
 
-import org.springframework.data.repository.CrudRepository;
-
 import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
 public interface QualityProfileRepository extends CrudRepository<QualityProfile, Long> {
 
