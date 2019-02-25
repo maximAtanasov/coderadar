@@ -191,7 +191,7 @@ public class UserControllerTest extends ControllerTestTemplate {
   private ResultHandler documentPasswordChange() {
     ConstrainedFields fields = fields(PasswordChangeResource.class);
     return document(
-        "user/password/change",
+            "user/password/change",
         requestFields(
             fields.withPath("refreshToken").description("the current refresh token of the user"),
             fields
